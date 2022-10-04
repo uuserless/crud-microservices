@@ -4,8 +4,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -15,7 +17,12 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
-    private String username;
+    private String firstName;
+    @Column
+    private String lastName;
+    @Column
+    private int age;
+    @Email
     @Column
     private String email;
     @Column
@@ -25,20 +32,22 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
-
     public User() {
     }
 
-    public User(String username,String email,String password,List<Role> roles) {
-        this.username = username;
+    public User(String firstName,String lastName,int age,String email,String password,List<Role> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
         this.email = email;
         this.password = password;
         this.roles = roles;
     }
 
-    public User(int id,String username,String email,String password,List<Role> roles) {
+    public User(int id,String firstName,String lastName,String email,String password,List<Role> roles) {
         this.id = id;
-        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.roles = roles;
@@ -52,13 +61,28 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    @Override
-    public String getUsername() {
-        return username;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setUsername(String name) {
-        this.username = name;
+    public void setFirstName(String name) {
+        this.firstName = name;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getEmail() {
@@ -73,8 +97,10 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public String getRoles() {
+        return roles.stream()
+                .map(Role::toString)
+                .collect(Collectors.joining(" "));
     }
 
     public void setRoles(List<Role> role) {
@@ -88,12 +114,17 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+        return roles;
     }
 
     @Override
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     @Override
@@ -120,8 +151,12 @@ public class User implements UserDetails {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + username + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 
@@ -131,14 +166,18 @@ public class User implements UserDetails {
         if (!(o instanceof User user)) return false;
 
         if (getId() != user.getId()) return false;
-        if (!getUsername().equals(user.getUsername())) return false;
+        if (getAge() != user.getAge()) return false;
+        if (!getFirstName().equals(user.getFirstName())) return false;
+        if (!getLastName().equals(user.getLastName())) return false;
         return getEmail().equals(user.getEmail());
     }
 
     @Override
     public int hashCode() {
         int result = getId();
-        result = 31 * result + getUsername().hashCode();
+        result = 31 * result + getFirstName().hashCode();
+        result = 31 * result + getLastName().hashCode();
+        result = 31 * result + getAge();
         result = 31 * result + getEmail().hashCode();
         return result;
     }

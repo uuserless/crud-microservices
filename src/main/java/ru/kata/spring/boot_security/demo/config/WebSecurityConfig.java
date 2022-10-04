@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.configs;
+package ru.kata.spring.boot_security.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,8 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 @Configuration
@@ -35,10 +34,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user**").hasAnyRole("USER","ADMIN")
-                .antMatchers("/","/login").permitAll()
+                .antMatchers("/login*").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().successHandler(successUserHandler)
+                .formLogin().loginPage("/login").successHandler(successUserHandler).loginProcessingUrl("/process_login")
                 .permitAll()
                 .and()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/login")
@@ -46,8 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
