@@ -7,7 +7,7 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -25,11 +25,9 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findAll();
     }
 
-    @Override
-    public List<Role> findRoleByName(String roleName) {
-        return getListRoles().stream()
-                .filter(role -> roleName.contains(role.getRole()))
-                .collect(Collectors.toList());
+    public Role findRoleById(int id) {
+        Optional<Role> role = roleRepository.findById(id);
+        return role.orElse(null);
     }
 
 }
