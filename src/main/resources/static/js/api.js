@@ -67,7 +67,7 @@ async function getAdminPanel() {
 }
 
 async function showEditModal(id) {
-
+    $('#editRoles').empty()
     let user = await userFetch.getUserById(id)
     let form = document.forms['editModalForm'];
     form.editId.value = user.id;
@@ -82,8 +82,8 @@ async function showEditModal(id) {
             roles.map(role => {
                 let selectedRole = false;
                 console.log(role)
-                for (let i = 0; i < user.authorities.length; i++) {
-                    if (user.authorities[i].role === role.role) {
+                for (let i = 0; i < user.roles.length; i++) {
+                    if (user.roles.role === role.role) {
                         selectedRole = true;
                         break;
                     }
@@ -92,13 +92,13 @@ async function showEditModal(id) {
                 el.text = role.role.substring(5);
                 el.value = role.id;
                 if (selectedRole) el.selected = true;
-                $('#editRoles').empty().append(el);
+                $('#editRoles').append(el);
             })
         })
 }
 
 async function showDeleteModal(id) {
-
+    $('#deleteRoles').empty()
     let user = await userFetch.getUserById(id)
     let form = document.forms['deleteModalForm'];
     form.id.value = user.id;
@@ -113,7 +113,7 @@ async function showDeleteModal(id) {
                 let el = document.createElement('option');
                 el.text = role.role.substring(5);
                 el.value = role.id;
-                $('#deleteRoles').empty().append(el)
+                $('#deleteRoles').append(el)
             })
         })
 }
@@ -209,7 +209,18 @@ async function newUser() {
         userFetch.addUser(user).then(() => {
             form.reset();
             getAdminPanel();
-            $('#all-users-nav').click();
+            $(document).ready(function() {
+                $('#new-user-nav').removeClass('active')
+                    .removeAttr('aria-selected')
+                    .attr('tabindex', -1);
+                $('a[href="#all-users-panel"]').addClass('active')
+                    .attr('aria-selected', 'true')
+                    .removeAttr('tabindex');
+                $('#all-users-panel').addClass('active')
+                    .addClass('show');
+                $('#new-user-panel').removeClass('active')
+                    .removeClass('show');
+            });
         })
     })
 }
