@@ -18,21 +18,23 @@
             crossorigin="anonymous"></script>
     <script type="text/javascript" th:src="@{js/api.js}"></script>
     <style>
-        .row {
-            min-height: 100vh;
-        }
+      .row {
+        min-height: 100vh;
+      }
     </style>
 </head>
 <body>
 <div class="container-fluid bg-dark">
     <nav class="navbar sticky-top bg-dark">
         <div class="col-11 p-1">
-            <div class="text-light"><b id="header-username"></b> with roles: <a id="header-roles"></a>
+            <div class="text-light"><b id="header-username"></b> with roles: <a
+                    id="header-roles"></a>
             </div>
         </div>
         <div class="col-1 text-md-end">
             <form th:action="@{/logout}" th:method="post">
-                <button type="submit" class="btn btn-dark text-secondary text-md-end small" >Logout</button>
+                <button type="submit" class="btn btn-dark text-secondary text-md-end small">Logout
+                </button>
             </form>
         </div>
     </nav>
@@ -41,9 +43,11 @@
 <div class="row">
     <div class="col">
         <p></p>
-        <ul class="nav flex-column nav-pills" role="tablist" style="margin-left: -5px; margin-right: -40px">
+        <ul class="nav flex-column nav-pills" role="tablist"
+            style="margin-left: -5px; margin-right: -40px">
             <li class="nav-item">
-                <a role="tab" class="nav-link active" data-bs-toggle="pill" href="#user-panel" id="user">User</a>
+                <a role="tab" class="nav-link active" data-bs-toggle="pill" href="#user-panel"
+                   id="user">User</a>
             </li>
         </ul>
     </div>

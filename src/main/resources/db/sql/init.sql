@@ -6,15 +6,12 @@ VALUES (18, 'user@mail.ru', 'user', 'user', '$2a$12$bW5uTXl.QahmCIAZnyyrP.xkJqiU
 ');
 insert into roles (role) value ('ROLE_ADMIN');
 insert into roles (role) value ('ROLE_USER');
-insert into users_roles (user_id, role_id) values (
-                                                      (select id from users where email = 'admin@mail.ru'),
-                                                      (select id from roles where role = 'ROLE_ADMIN')
-                                                  );
-insert into users_roles (user_id, role_id) values (
-                                                      (select id from users where email = 'admin@mail.ru'),
-                                                      (select id from roles where role = 'ROLE_USER')
-                                                  );
-insert into users_roles (user_id, role_id) values (
-                                                      (select id from users where email = 'user@mail.ru'),
-                                                      (select id from roles where role = 'ROLE_USER')
-                                                  );
+insert into users_roles (user_id, role_id)
+values ((select id from users where email = 'admin@mail.ru'),
+        (select id from roles where role = 'ROLE_ADMIN'));
+insert into users_roles (user_id, role_id)
+values ((select id from users where email = 'admin@mail.ru'),
+        (select id from roles where role = 'ROLE_USER'));
+insert into users_roles (user_id, role_id)
+values ((select id from users where email = 'user@mail.ru'),
+        (select id from roles where role = 'ROLE_USER'));

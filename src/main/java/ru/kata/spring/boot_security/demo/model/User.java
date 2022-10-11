@@ -1,13 +1,21 @@
 package ru.kata.spring.boot_security.demo.model;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
@@ -32,10 +40,12 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
+
     public User() {
     }
 
-    public User(String firstName,String lastName,int age,String email,String password,List<Role> roles) {
+    public User(String firstName, String lastName, int age, String email, String password,
+            List<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
@@ -44,7 +54,8 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public User(int id,String firstName,String lastName,String email,String password,List<Role> roles) {
+    public User(int id, String firstName, String lastName, String email, String password,
+            List<Role> roles) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -162,13 +173,25 @@ public class User implements UserDetails {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User user)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User user)) {
+            return false;
+        }
 
-        if (getId() != user.getId()) return false;
-        if (getAge() != user.getAge()) return false;
-        if (!getFirstName().equals(user.getFirstName())) return false;
-        if (!getLastName().equals(user.getLastName())) return false;
+        if (getId() != user.getId()) {
+            return false;
+        }
+        if (getAge() != user.getAge()) {
+            return false;
+        }
+        if (!getFirstName().equals(user.getFirstName())) {
+            return false;
+        }
+        if (!getLastName().equals(user.getLastName())) {
+            return false;
+        }
         return getEmail().equals(user.getEmail());
     }
 
