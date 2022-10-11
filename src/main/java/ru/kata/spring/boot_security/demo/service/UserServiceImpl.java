@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Optional<User> foundOptional = userRepository.findById(id);
         return foundOptional.orElse(null);
     }
-
+    @Override
     public User findOneUserByName(String name) {
         return userRepository.findUserByEmail(name);
     }

@@ -24,6 +24,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findAll();
     }
 
+    @Override
     public Role findRoleById(int id) {
         Optional<Role> role = roleRepository.findById(id);
         return role.orElse(null);
