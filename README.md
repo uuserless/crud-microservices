@@ -1,6 +1,6 @@
 # PP_3_1_4_Rest_JS
 
-tables will be created after the application starts, to fill the table use init.sql
+tables and entitys will be created after the application starts
 
 admin auth-- admin@mail.ru : root
 
